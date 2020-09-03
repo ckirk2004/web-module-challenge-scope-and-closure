@@ -64,7 +64,7 @@ function counter2() {
 Write a function called `inning` that returns a random number of points that a team scored in an inning. This should be a whole number between 0 and 2. */
 
 function inning() {
-	let points = Math.round(Math.random() * 2);
+	let points = Math.round(Math.random() * 2); //This creates a random number between 0 - 2
 	return points;
 }
 console.log(inning());
@@ -83,11 +83,11 @@ finalScore(inning, 9) might return:
 
 */
 
-function finalScore(inningScore, inningNumber) {
+function finalScore(callback, inningNumber) {
 	let score = { Home: 0, Away: 0 };
-	for (let i = 0; i < inningNumber; i++) {
-		score.Home = score.Home + inningScore();
-		score.Away = score.Away + inningScore();
+	for (let i = 1; i < inningNumber; i++) {
+		score.Home += callback();
+		score.Away += callback();
 	}
 	return score;
 }
@@ -114,6 +114,31 @@ and returns the score at each pont in the game, like so:
 9th inning: awayTeam - homeTeam
 Final Score: awayTeam - homeTeam */
 
-function scoreboard(inningScore, inningNumber, totalInnings) {
-	let scoreboard = {};
+function scoreboard(callback, inningNumber) {
+	// setup object for the score keeping.
+	let gameScore = { Home: 0, Away: 0 };
+	// for loop to iterate through number of innings and apply a score to the inning.
+	for (let i = 1; i <= inningNumber; i++) {
+		let homeScore = callback();
+		let awayScore = callback();
+
+		gameScore.Home += homeScore;
+		gameScore.Away += awayScore;
+		// Function inside the loop to apply the score to each inning with proper 1st, 2nd and 3rd notation and return them.
+		function getInningScore() {
+			if (i === 1) {
+				return `${i}st inning: ${gameScore.Home} - ${gameScore.Away}`;
+			} else if (i === 2) {
+				return `${i}nd inning: ${gameScore.Home} - ${gameScore.Away}`;
+			} else if (i === 3) {
+				return `${i}rd inning: ${gameScore.Home} - ${gameScore.Away}`;
+			} else {
+				return `${i}th inning: ${gameScore.Home} - ${gameScore.Away}`;
+			}
+		}
+
+		console.log(getInningScore()); //Logs function running inning 1-9 with scores.
+	}
+	return `Final Score: ${gameScore.Home} - ${gameScore.Away}`; // return the final score of the game.
 }
+console.log(scoreboard(inning, 9)); // Logs the function that runs the entire scoreboard of inning 1-9 and outputs a final score.
